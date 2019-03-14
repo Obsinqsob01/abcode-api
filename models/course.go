@@ -9,43 +9,42 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-type User struct {
-	Id       int64  `orm:"auto"`
-	Name     string `orm:"size(128)"`
-	Email    string `orm:"size(128)"`
-	Password string `orm:"size(128)"`
-	Username string `orm:"size(128)"`
+type Course struct {
+	Id          int64  `orm:"auto"`
+	Name        string `orm:"size(128)"`
+	Description string `orm:"size(128)"`
+	Category    string `orm:"size(128)"`
 }
 
 func init() {
-	orm.RegisterModel(new(User))
+	orm.RegisterModel(new(Course))
 }
 
-// AddUser insert a new User into database and returns
+// AddCourse insert a new Course into database and returns
 // last inserted Id on success.
-func AddUser(m *User) (id int64, err error) {
+func AddCourse(m *Course) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetUserById retrieves User by Id. Returns error if
+// GetCourseById retrieves Course by Id. Returns error if
 // Id doesn't exist
-func GetUserById(id int64) (v *User, err error) {
+func GetCourseById(id int64) (v *Course, err error) {
 	o := orm.NewOrm()
-	v = &User{Id: id}
-	if err = o.QueryTable(new(User)).Filter("Id", id).RelatedSel().One(v); err == nil {
+	v = &Course{Id: id}
+	if err = o.QueryTable(new(Course)).Filter("Id", id).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllUser retrieves all User matches certain condition. Returns empty list if
+// GetAllCourse retrieves all Course matches certain condition. Returns empty list if
 // no records exist
-func GetAllUser(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllCourse(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(User))
+	qs := o.QueryTable(new(Course))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -91,7 +90,7 @@ func GetAllUser(query map[string]string, fields []string, sortby []string, order
 		}
 	}
 
-	var l []User
+	var l []Course
 	qs = qs.OrderBy(sortFields...).RelatedSel()
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -114,11 +113,11 @@ func GetAllUser(query map[string]string, fields []string, sortby []string, order
 	return nil, err
 }
 
-// UpdateUser updates User by Id and returns error if
+// UpdateCourse updates Course by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateUserById(m *User) (err error) {
+func UpdateCourseById(m *Course) (err error) {
 	o := orm.NewOrm()
-	v := User{Id: m.Id}
+	v := Course{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -129,15 +128,15 @@ func UpdateUserById(m *User) (err error) {
 	return
 }
 
-// DeleteUser deletes User by Id and returns error if
+// DeleteCourse deletes Course by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteUser(id int64) (err error) {
+func DeleteCourse(id int64) (err error) {
 	o := orm.NewOrm()
-	v := User{Id: id}
+	v := Course{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&User{Id: id}); err == nil {
+		if num, err = o.Delete(&Course{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
