@@ -25,6 +25,11 @@ func init() {
 				&controllers.CourseController{},
 			),
 		),
+		beego.NSNamespace("/tema",
+			beego.NSInclude(
+				&controllers.TemaController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }
