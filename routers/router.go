@@ -30,6 +30,11 @@ func init() {
 				&controllers.TemaController{},
 			),
 		),
+		beego.NSNamespace("/lesson",
+			beego.NSInclude(
+				&controllers.LessonController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }
