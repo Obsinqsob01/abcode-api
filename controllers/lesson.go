@@ -16,7 +16,8 @@ type LessonController struct {
 }
 
 type TemaRelated struct {
-	Tema string `json:"tema"`
+	Tema string       `json:"tema"`
+	Quiz *models.Quiz `json:"quiz"`
 }
 
 // URLMapping ...
@@ -47,7 +48,13 @@ func (c *LessonController) Post() {
 	idTema, _ := strconv.ParseInt(tr.Tema, 10, 64)
 	v.Tema, _ = models.GetTemaById(idTema)
 
-	if _, err := models.AddLesson(&v); err == nil {
+	quiz := tr.Quiz
+
+	if lesson, err := models.AddLesson(&v); err == nil {
+		quiz.Lesson, _ = models.GetLessonById(lesson)
+
+		models.AddQuiz(quiz)
+
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
 	} else {
