@@ -48,12 +48,13 @@ func (c *LessonController) Post() {
 	idTema, _ := strconv.ParseInt(tr.Tema, 10, 64)
 	v.Tema, _ = models.GetTemaById(idTema)
 
-	quiz := tr.Quiz
-
 	if lesson, err := models.AddLesson(&v); err == nil {
-		quiz.Lesson, _ = models.GetLessonById(lesson)
+		if tr.Quiz != nil {
+			quiz := tr.Quiz
+			quiz.Lesson, _ = models.GetLessonById(lesson)
 
-		models.AddQuiz(quiz)
+			models.AddQuiz(quiz)
+		}
 
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
