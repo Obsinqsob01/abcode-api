@@ -15,7 +15,7 @@ type Quiz struct {
 	Answer1      string  `orm:"size(128)"`
 	Answer2      string  `orm:"size(128)"`
 	Answer3      string  `orm:"size(128)"`
-	WhichCorrect int64   `orm:"null`
+	WhichCorrect int64   `orm:"default(0)`
 	Lesson       *Lesson `orm:"rel(fk)"`
 }
 
